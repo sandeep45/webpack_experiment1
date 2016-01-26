@@ -6,7 +6,8 @@ module.exports = {
   context: path.join(__dirname, "src"), //The base directory (absolute path!) for resolving the entry option.
   entry: {
     dashboard: "js/entry/dashboard.js",
-    visitors: "js/entry/visitors.js"
+    visitors: "js/entry/visitors.js",
+    dashboard_and_visitors: "html/dashboard_and_visitors.html"
   },
   output: {
     path: path.join(__dirname, "dist"), //path to where webpack will build your stuff
