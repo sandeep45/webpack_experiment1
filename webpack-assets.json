@@ -1,14 +1,14 @@
 {
   "dashboard": {
-    "js": "/dist/e4857e3abf31163de0f4/dashboard_e4857e3abf31163de0f4.bundle.js"
+    "js": "/dist/db83eea267730b023c79/dashboard_db83eea267730b023c79.bundle.js"
   },
   "dashboard_and_visitors": {
-    "js": "/dist/e4857e3abf31163de0f4/dashboard_and_visitors_e4857e3abf31163de0f4.bundle.js"
+    "js": "/dist/db83eea267730b023c79/dashboard_and_visitors_db83eea267730b023c79.bundle.js"
   },
   "visitors": {
-    "js": "/dist/e4857e3abf31163de0f4/visitors_e4857e3abf31163de0f4.bundle.js"
+    "js": "/dist/db83eea267730b023c79/visitors_db83eea267730b023c79.bundle.js"
   },
   "commons": {
-    "js": "/dist/e4857e3abf31163de0f4/commons_e4857e3abf31163de0f4.js"
+    "js": "/dist/db83eea267730b023c79/commons_db83eea267730b023c79.js"
   }
 }

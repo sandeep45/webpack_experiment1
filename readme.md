@@ -1,8 +1,10 @@
 ## Common JS Module
 
-Synchronous
-Made for NODE
-Webpack suports it, and also supports its syntax for Async loading
+This is the format used in Node.js. It was built for the server side when compared to it coutner part AMD which was build for the browser. With webpack, it doen't matter which one use, as it supports both.
+
+It synchronously loads the module. Webpack also supports CommonJS and Async loding. Here is an example:
+
+Calculator Module:
 
 ````
 \\ calculator.js
@@ -16,7 +18,11 @@ var calculator = {
   }
 };
 module.exports = calculator;
+````
 
+Then in Main.js we will be using the calculator module:
+
+````
 \\ main.js
 
 c = require("./calcaultor.js")
@@ -25,8 +31,16 @@ alert(c.subtract(2,1));
 
 ````
 
-Webpack compiles main.js: `weback main.js build.js`
-At build time the require call is replaced with code which loads calculator.js
+We used `module.exports` to expose the module and then we used `require` to load in a file.
+
+main.js will not work directly in the browser, as the browser doesn't support require and doesn't have module object. To make this work we will use webbpack and compile main.js in to another file which can be processed by the browser
+
+````
+weback ./main.js build.js
+````
+
+
+At build time the require call is intelligently replaced with code which loads calculator.js
 It also takes care of multiple depencies, as in this example calculator could have required another module, lets say `Logger` in `logging.js`
 
 Refernece:
@@ -504,6 +518,7 @@ plugins: [
     title: "AG Index",
     filename: "index.html",
     template: "templates/index.html",
+    chunks: ['commons', "visitors"], // only these chunks are put in to the HTML file
     inject: 'body',
     showErrors: true
   })

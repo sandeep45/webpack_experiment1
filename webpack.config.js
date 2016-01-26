@@ -31,6 +31,7 @@ module.exports = {
       filename: "index.html",
       template: "templates/index.html",
       inject: 'body',
+      chunks: ['commons', 'dashboard', "visitors"],
       // hash: true, // adds the has to the Query String
       showErrors: true
     })
