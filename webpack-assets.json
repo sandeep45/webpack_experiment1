@@ -1,0 +1,14 @@
+{
+  "dashboard": {
+    "js": "/dist/e4857e3abf31163de0f4/dashboard_e4857e3abf31163de0f4.bundle.js"
+  },
+  "dashboard_and_visitors": {
+    "js": "/dist/e4857e3abf31163de0f4/dashboard_and_visitors_e4857e3abf31163de0f4.bundle.js"
+  },
+  "visitors": {
+    "js": "/dist/e4857e3abf31163de0f4/visitors_e4857e3abf31163de0f4.bundle.js"
+  },
+  "commons": {
+    "js": "/dist/e4857e3abf31163de0f4/commons_e4857e3abf31163de0f4.js"
+  }
+}

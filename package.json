@@ -11,6 +11,7 @@
     "url-loader": "^0.5.7"
   },
   "devDependencies": {
+    "assets-webpack-plugin": "^3.2.0",
     "babel": "^6.3.26",
     "babel-cli": "^6.4.5",
     "babel-core": "^6.4.5",
@@ -18,6 +19,7 @@
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "expose-loader": "^0.7.1",
+    "html-webpack-plugin": "^2.7.2",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
     "react-hot-loader": "^1.3.0",
@@ -27,7 +29,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --hot --inline --open",
-    "compile": "webpack --progress --colors --watch --display-error-details",
+    "compile": "webpack --progress --colors --watch --display-error-details --display-chunks --display-reasons",
     "p_server": "python -m SimpleHTTPServer",
     "server": "webpack-dev-server"
   },

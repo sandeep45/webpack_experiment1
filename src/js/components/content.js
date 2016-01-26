@@ -7,7 +7,7 @@ var Content = React.createClass({
   render: function(){
     return (
       <div>
-        This is some Content 1234567890
+        This is some Content 12345678901
       </div>
     )
   }

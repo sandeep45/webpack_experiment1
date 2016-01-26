@@ -1,5 +1,8 @@
 var path = require("path");
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
+var AssetsPlugin = require('assets-webpack-plugin');
+var assetsPluginInstance = new AssetsPlugin({prettyPrint: true});
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   // devtool: "eval-source-map",
@@ -10,18 +13,27 @@ module.exports = {
     dashboard_and_visitors: "html/dashboard_and_visitors.html"
   },
   output: {
-    path: path.join(__dirname, "dist"), //path to where webpack will build your stuff
-    filename: "[name].bundle.js",
-    chunkFilename: "[id].chunk.js",
-    publicPath: "/dist/" //specifies the public URL address of the output files when referenced in a browser
+    path: path.join(__dirname, "dist", "[hash]"), //path to where webpack will build your stuff
+    filename: "[name]_[hash].bundle.js",
+    chunkFilename: "[id]_[hash].chunk.js",
+    publicPath: "/dist/[hash]/" //specifies the public URL address of the output files when referenced in a browser
   },
   plugins: [
     new CommonsChunkPlugin({
       name: "commons",
-      filename: "commons.js",
+      filename: "commons_[hash].js",
       minChunks: 2
     }),
-    // new CommonsChunkPlugin("entry-commons.js")
+    // new CommonsChunkPlugin("entry-commons.js"),
+    assetsPluginInstance,
+    new HtmlWebpackPlugin({
+      title: "AG Index",
+      filename: "index.html",
+      template: "templates/index.html",
+      inject: 'body',
+      // hash: true, // adds the has to the Query String
+      showErrors: true
+    })
   ],
   module: {
     loaders: [
@@ -44,7 +56,8 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        loader: "file?name=[name].[ext]"
+        loader: "file?name=[name].[ext]",
+        exclude: /templates/
       },
       {
         test: /\.(png|jpg)$/,

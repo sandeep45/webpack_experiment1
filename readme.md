@@ -29,13 +29,15 @@ Webpack compiles main.js: `weback main.js build.js`
 At build time the require call is replaced with code which loads calculator.js
 It also takes care of multiple depencies, as in this example calculator could have required another module, lets say `Logger` in `logging.js`
 
-Refernece: https://webpack.github.io/docs/commonjs.html
+Refernece:
+- https://webpack.github.io/docs/commonjs.html
 
 ## require function
 
 When requiring a module, the path to the file is passed in. The path is normally relative from the current file. So it starts with `./`. If this is missing and just the name is passed then its assumed to be a vendor module and checked in `node_modules`, `web_modules`  etc.
 
-Reference: http://webpack.github.io/docs/resolving.html
+Reference:
+- http://webpack.github.io/docs/resolving.html
 
 ## webkack option - resolve.root
 
@@ -73,11 +75,10 @@ A bundle is a group of modules, compiled in to one file, which is downloaded tog
 
 ## Webpack Configuration
 
-https://github.com/webpack/docs/wiki/configuration
+Reference:
+- https://github.com/webpack/docs/wiki/configuration
 
 ## Dependecy Management
-
-http://tooling.github.io/book-of-modern-frontend-tooling/dependency-management/webpack/getting-started.html
 
 Run any script specified in `package.json` under the `scripts` section.
 Command: `npm run xyz`
@@ -86,16 +87,23 @@ Here `xyz` is the identifier setup for the script in package.json
 NODE_ENV=production webpack -p --config webpack.production.config.js
 webpack.production.config.js
 
+Reference:
+- http://tooling.github.io/book-of-modern-frontend-tooling/dependency-management/webpack/getting-started.html
+
+
+
 ## Setting up Hot Module Replacement
 Adding the index.html to the entry point along with the file loaded will copy it over to `dist` and then we can start the `webpack-dev-server` with the `--hot` and `--inline` option. This will open up index.html and all changes will inserted hot via socket.io, without refreshing the page.
 
-https://robots.thoughtbot.com/setting-up-webpack-for-react-and-hot-module-replacement
-http://www.jonathan-petitcolas.com/2015/05/15/howto-setup-webpack-on-es6-react-application-with-sass.html
+Reference:
+- https://robots.thoughtbot.com/setting-up-webpack-for-react-and-hot-module-replacement
+- http://www.jonathan-petitcolas.com/2015/05/15/howto-setup-webpack-on-es6-react-application-with-sass.html
 
 ## To compile JSX in to html
 Use the babel loader. It will turn your js file with JSX in to pure JS.
 
-https://github.com/babel/babel-loader
+Reference:
+- https://github.com/babel/babel-loader
 
 ## publicPath
 
@@ -137,7 +145,8 @@ sudo n stable
 
 ````
 
-https://davidwalsh.name/upgrade-nodejs
+Reference:
+- https://davidwalsh.name/upgrade-nodejs
 
 ### Npm options
 
@@ -318,15 +327,247 @@ To use it:
 
 `webpack-dev-server`
 
+## Generat entry HTML File
+
+We want to build file in `dist` with a `hash` in it. So the file should look like
+
+`app.md5checksumhere.js`
+
+And in our html file we want:
+
+````
+<script src='app.hash.js'></script>
+````
+
+Everytime webpack compiles the hash is changed, the hash changes and then updating the HTML is a pain.
+The hash is available in the stats.
+
+````
+~/code/webpack_experiment1 (master)$ webpack --progress --colors --watch --display-error-details --display-chunks --display-reasons --display-origins
+Hash: 6084c56567cfe1654e6b
+Version: webpack 1.12.11
+Time: 1647ms
+                                                Asset       Size  Chunks             Chunk Names
+                          dashboard_and_visitors.html  397 bytes          [emitted]
+                                       dashboard.html  291 bytes          [emitted]
+                 fda0cbaaf966dc97025bfa9a30b2f156.jpg     683 kB          [emitted]
+                                        visitors.html  289 bytes          [emitted]
+             dashboard.6084c56567cfe1654e6b.bundle.js    6.06 kB       0  [emitted]  dashboard
+                      1.6084c56567cfe1654e6b.chunk.js    1.71 kB       1  [emitted]
+dashboard_and_visitors.6084c56567cfe1654e6b.bundle.js  168 bytes       2  [emitted]  dashboard_and_visitors
+              visitors.6084c56567cfe1654e6b.bundle.js    13.5 kB       3  [emitted]  visitors
+                                           commons.js     956 kB       4  [emitted]  commons
+chunk    {0} dashboard.6084c56567cfe1654e6b.bundle.js (dashboard) 5.46 kB {4} [rendered]
+    > dashboard [0]
+     + 6 hidden modules
+chunk    {1} 1.6084c56567cfe1654e6b.chunk.js 1.58 kB {0} {3} [rendered]
+    > [0] 25:4-27:6
+    > duplicate [0] 28:4-30:6
+     + 1 hidden modules
+chunk    {2} dashboard_and_visitors.6084c56567cfe1654e6b.bundle.js (dashboard_and_visitors) 73 bytes {4} [rendered]
+    > dashboard_and_visitors [0]
+     + 1 hidden modules
+chunk    {3} visitors.6084c56567cfe1654e6b.bundle.js (visitors) 12.6 kB {4} [rendered]
+    > visitors [0]
+     + 6 hidden modules
+chunk    {4} commons.js (commons) 911 kB [rendered]
+     + 163 hidden modules
+````
+
+Lucky for us, there is a plugin for it:
+
+https://github.com/ampedandwired/html-webpack-plugin
+
+Or we could render the HTML server side like
+
+````
+<script src="/app.<?= hash ?>.js"></script>
+````
+
 Reference:
+- https://github.com/webpack/webpack/issues/86
+- https://webpack.github.io/docs/long-term-caching.html
 - https://www.npmjs.com/package/webpack-dev-server
 - http://webpack.github.io/docs/webpack-dev-server.html
 
 
-## More Reference:
+## List only top level npm packages installed
+
+`npm list --depth=0`
+
+## Building HTML files for Entry Points
+
+To run the entry js file, we need an html file which includes the js entry file along with the common js file and any other supporting HTML structure. One way to do so is to build the html file in the `/src/html` directory and then have them copied over to the `dist` folder when webpack builds them. THis can be accomplished by making the html file a dependency  of the js file.
+
+So lets say we have `src/js/visitors.js` as the entry js file and `src\html\visitors.html` as its html file.
+
+Now in the js file we will add
+
+````
+require("html/visitors.html");
+````
+
+In webpack.config.js we will teach webpack how to require html files:  Now we build with webpack the html file will be copied over to the `dist` folder. This is done by adding the file loader loader. It just copies over any html file. I have it setup to not copy over the templates folder. This is optional, and you will see in the next option why i did so.
+
+````
+{
+  test: /\.html$/,
+  loader: "file?name=[name].[ext]",
+  exclude: /templates/
+}
+````
+
+The issue with this approach is that I am using `hash` in the file path and in the name of the file. The hash is unique to every build. So my html files, need to refer to this. Here is an example of how it would look like:
+
+````
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Example template</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <h1>/dist/[hash]/</h1>
+  <h1>
+    Came from templates/index.html
+  </h1>
+  <script src="/dist/e4857e3abf31163de0f4/commons_e4857e3abf31163de0f4.js">
+</body>
+</html>
+````
+
+Here you can notice the hash in the script tag. Setting this up manually everytime I do a build is very tedious.
+
+To solve this, we have two solutions:
+
+1. Build the template server side, and have webpack tell us after every build what the `hash` value is.
+
+When we do a webpack build, the output looks like this:
+
+````
+~/code/html-webpack-plugin/examples/html-loader (master)$ webpack --watch
+Hash: e4857e3abf31163de0f4
+Version: webpack 1.12.11
+Time: 319ms
+     Asset       Size  Chunks             Chunk Names
+ bundle.js    1.49 kB       0  [emitted]  main
+index.html  169 bytes          [emitted]
+   [0] ./example.js 101 bytes {0} [built]
+Child html-webpack-plugin for "index.html":
+       [0] /Users/sandeeparneja/code/html-webpack-plugin/lib/loader.js!./index.html 312 bytes {0} [built]
+        + 2 hidden modules
+````
+
+You can see on the first line, there is the hash we need. Webpack can be configure to spit out JSON which we can write to a file, and then update that to a database field, which is then used when server is building the html files.
+
+To make this a bit more streamlined we can use the `assetsPluginInstance`
+
+````
+npm install assets-webpack-plugin --save-dev
+
+\\webpack.config.js
+var AssetsPlugin = require('assets-webpack-plugin');
+plugins: [
+  assetsPluginInstance,
+]
+````
+
+This will now output a file named `webpack-assets.json`. It will have all the bundles and their paths with hashes in them, e.g.
+
+````
+{
+  "dashboard": {
+    "js": "/dist/e4857e3abf31163de0f4/dashboard_e4857e3abf31163de0f4.bundle.js"
+  },
+  "dashboard_and_visitors": {
+    "js": "/dist/e4857e3abf31163de0f4/dashboard_and_visitors_e4857e3abf31163de0f4.bundle.js"
+  },
+  "visitors": {
+    "js": "/dist/e4857e3abf31163de0f4/visitors_e4857e3abf31163de0f4.bundle.js"
+  },
+  "commons": {
+    "js": "/dist/e4857e3abf31163de0f4/commons_e4857e3abf31163de0f4.js"
+  }
+}
+````
+
+I dont like this approach, because it couples my front end to the backend for building html files. It feels like spring 19 miles and hten walking the last mile. I feel like if we can have come this far, then lets build it all in webpack and now have to rely on the server to build our front end HTML files.
+
+So as another soltion we will build the files in webpack. This can be achieved by using: `html-webpack-plugin`. It will build the html file by taking an html template file and inserting the script src in its body along with hash.
+
+````
+\\ webpack.config.js
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+plugins: [
+  new HtmlWebpackPlugin({
+    title: "AG Index",
+    filename: "index.html",
+    template: "templates/index.html",
+    inject: 'body',
+    showErrors: true
+  })
+]
+````
+
+Now i have a templates folder with how i want my index.html to look like:
+
+````
+\\ src\templates\index.html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Example template</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <h1><%= webpackConfig.output.publicPath %></h1>
+  <h1>
+    Came from templates/index.html
+  </h1>
+</body>
+</html>
+````
+
+Now when I do `webpack`, I will get:
+
+````
+\\ dist\index.html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Example template</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <h1>/dist/e4857e3abf31163de0f4/</h1>
+  <h1>
+    Came from templates/index.html
+  </h1>
+  <script src="/dist/e4857e3abf31163de0f4/commons_e4857e3abf31163de0f4.js">
+  </script><script src="/dist/e4857e3abf31163de0f4/visitors_e4857e3abf31163de0f4.bundle.js"></script>
+</body>
+</html>
+````
+
+Here you can see that the HtmlWebpackPlugin plugin added the entry files in the body tag. Also I was able to access information in webpack.config.js for other customsization of the index file.
+
+Note: I noticed an issue with the hash in the public_path. It had the `[hash]` variable rather than the value of the hash. To resovle it i manuualy made the fix mentioned in this commit: https://github.com/ampedandwired/html-webpack-plugin/commit/41a255a2f1a0be054b03ceb9231f538ffbf350af
+
+At the time of this writing, i did not find it in master, but I am sure it will get there soon.
+
+Reference:
+- https://github.com/sporto/assets-webpack-plugin
+- https://www.npmjs.com/package/html-webpack-plugin
+
+Another way to do so will be to build the html file,
+
+
+## More References:
 - https://egghead.io/lessons/javascript-intro-to-webpack
 - https://github.com/petehunt/webpack-howto
 - https://www.youtube.com/watch?v=VkTCL6Nqm6Y&feature=youtu.be
 - http://webpack.github.io/docs/list-of-tutorials.html
-
 
