@@ -1,0 +1,37 @@
+{
+  "name": "webpack_experiment1",
+  "version": "1.0.0",
+  "description": "Experiment number 1 to understand using of webpack for building my JS related stuff",
+  "main": "entry.js",
+  "dependencies": {
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
+    "jquery": "^2.2.0",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7"
+  },
+  "devDependencies": {
+    "babel": "^6.3.26",
+    "babel-cli": "^6.4.5",
+    "babel-core": "^6.4.5",
+    "babel-loader": "^6.2.1",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "expose-loader": "^0.7.1",
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6",
+    "react-hot-loader": "^1.3.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.11"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --hot --inline --open",
+    "compile": "webpack --progress --colors --watch --display-error-details",
+    "p_server": "python -m SimpleHTTPServer",
+    "server": "webpack-dev-server"
+  },
+  "author": "Sandeep Arneja",
+  "license": "MIT",
+  "private": true
+}
