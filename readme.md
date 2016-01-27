@@ -567,6 +567,21 @@ Now when I do `webpack`, I will get:
 </html>
 ````
 
+## Webpack Dev Server & HtmlWebpackPlugin
+
+as long as you have a newer* version of webpack dev server and html webpack plugin it will work. I have:
+
+````
+{
+  "webpack-dev-server": "^1.14.1",
+  "html-webpack-plugin": "^2.7.2"
+}
+````
+
+With an older version of not locally installed webpack-dev-server I kept getting this error on start: `Error: Parameter 'dependency' must be a Dependency`
+
+Standalone example to show it: https://gist.github.com/ampedandwired/becbbcf91d7a353d6690
+
 Here you can see that the HtmlWebpackPlugin plugin added the entry files in the body tag. Also I was able to access information in webpack.config.js for other customsization of the index file.
 
 Note: I noticed an issue with the hash in the public_path. It had the `[hash]` variable rather than the value of the hash. To resovle it i manuualy made the fix mentioned in this commit: https://github.com/ampedandwired/html-webpack-plugin/commit/41a255a2f1a0be054b03ceb9231f538ffbf350af
@@ -579,10 +594,66 @@ Reference:
 
 Another way to do so will be to build the html file,
 
+## Hash in Output URL and webpack-dev-server HOT
+
+If you are want webpack-dev-server to return content as it changes HOT without refreshing the page, the you can start it like:
+
+`webpack-dev-server --debug --inline --hot --progress --colors --display-reasons`
+
+This will also work with with html-webpack-plugin and show files being built by the plugin.
+
+The issue is if you have `hash` in the name of the file. This is for long term caching and done like this:
+
+````
+output: {
+    path: path.join(__dirname, "dist", "[hash]"), //path to where webpack will build your stuff
+    filename: "[name]_[hash].bundle.js",
+    chunkFilename: "[id]_[hash].chunk.js",
+    publicPath: "/dist/[hash]/" //specifies the public URL address of the output files when referenced in a browser
+  }
+````
+
+This will add a unique hash to each file, but this also broke the hot loding of webpack-dev-server. Now everyime you make a change to a file, you will see webpack dev server, compile them and put them in memory ready for emitting and pushing the package down, but the hash has changed. Here is the output you will see on making a change:
+
+````
+webpack: bundle is now INVALID.
+Hash: b909c6adb36016fa602e
+Version: webpack 1.12.12
+Time: 296ms
+                                   Asset       Size  Chunks             Chunk Names
+dashboard_b909c6adb36016fa602e.bundle.js    5.91 kB       0  [emitted]  dashboard
+         1_b909c6adb36016fa602e.chunk.js    1.59 kB       1  [emitted]
+ visitors_b909c6adb36016fa602e.bundle.js    13.4 kB       2  [emitted]  visitors
+         commons_b909c6adb36016fa602e.js    1.22 MB       3  [emitted]  commons
+    0.0ff8b954830aad4690e6.hot-update.js    1.91 kB       0  [emitted]  dashboard
+    0ff8b954830aad4690e6.hot-update.json   36 bytes          [emitted]
+                              index.html  579 bytes          [emitted]
+chunk    {0} dashboard_b909c6adb36016fa602e.bundle.js, 0.0ff8b954830aad4690e6.hot-update.js (dashboard) 5.51 kB {3} [rendered]
+  [255] ./src/js/components/content.js 1.89 kB {0} [built]
+     + 6 hidden modules
+chunk    {1} 1_b909c6adb36016fa602e.chunk.js 1.58 kB {0} {2}
+     + 1 hidden modules
+chunk    {2} visitors_b909c6adb36016fa602e.bundle.js (visitors) 12.7 kB {3}
+     + 7 hidden modules
+chunk    {3} commons_b909c6adb36016fa602e.js (commons) 1.14 MB [rendered]
+     + 250 hidden modules
+Child html-webpack-plugin for "index.html":
+    chunk    {0} index.html 412 kB
+         + 3 hidden modules
+webpack: bundle is now VALID.
+````
+
+Line 2 shows that the hash has changed and now there is no `index.html` in the `dist` folder.
+
+Now i could run `webpack --watch` and `webpack-dev-server --hot --inline`. This will write the `hash` folder on every change and webpack-dev-server would work, but it breaks the hot loading part as the url has now changed so I will have to refresh the page.
+
+To solve this issue I have two config files: `webpack.config.js` for dev and `webpack.production.config.js` for prod.
+
+In my dev I dont use hash and in prod I use hashes. When compiling for prod i pass the config file as an option: `webpack --config webpack-production.config.js --progress`
 
 ## More References:
 - https://egghead.io/lessons/javascript-intro-to-webpack
 - https://github.com/petehunt/webpack-howto
 - https://www.youtube.com/watch?v=VkTCL6Nqm6Y&feature=youtu.be
 - http://webpack.github.io/docs/list-of-tutorials.html
-
+- http://alexhusakov.com/posts/Set-up-Webpack

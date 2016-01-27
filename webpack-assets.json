@@ -1,14 +1,11 @@
 {
   "dashboard": {
-    "js": "/dist/db83eea267730b023c79/dashboard_db83eea267730b023c79.bundle.js"
-  },
-  "dashboard_and_visitors": {
-    "js": "/dist/db83eea267730b023c79/dashboard_and_visitors_db83eea267730b023c79.bundle.js"
+    "js": "/dist/dashboard.bundle.js"
   },
   "visitors": {
-    "js": "/dist/db83eea267730b023c79/visitors_db83eea267730b023c79.bundle.js"
+    "js": "/dist/visitors.bundle.js"
   },
   "commons": {
-    "js": "/dist/db83eea267730b023c79/commons_db83eea267730b023c79.js"
+    "js": "/dist/commons.js"
   }
 }

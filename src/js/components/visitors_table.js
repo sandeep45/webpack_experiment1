@@ -11,7 +11,7 @@ var VisitorsTable = React.createClass({
         </caption>
         <thead>
           <tr>
-            <th> Id </th>
+            <th> Id 1</th>
             <th> Name </th>
             <th> Email </th>
           </tr>
