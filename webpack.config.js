@@ -5,7 +5,7 @@ var assetsPluginInstance = new AssetsPlugin({prettyPrint: true});
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  // devtool: "eval-source-map",
+  devtool: "eval-source-map",
   context: path.join(__dirname, "src"), //The base directory (absolute path!) for resolving the entry option.
   entry: {
     dashboard: "js/entry/dashboard.js",
@@ -39,14 +39,14 @@ module.exports = {
         test: /.css$/,
         loader: "style!css"
       },
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: 'babel',
-        query: {
-          presets: ['react']
-        }
-      },
+      // {
+      //   test: /\.js$/,
+      //   exclude: /(node_modules|bower_components)/,
+      //   loader: 'babel',
+      //   query: {
+      //     presets: ['react']
+      //   }
+      // },
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,

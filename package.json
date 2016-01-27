@@ -34,7 +34,7 @@
     "p_server": "python -m SimpleHTTPServer",
     "server": "webpack-dev-server",
     "dev-webpack": "webpack-dev-server --debug --inline --hot --progress --colors --display-reasons",
-    "prod-webpack": "webpack --config webpack.production.config.js --progress --display-modules"
+    "prod-webpack": "webpack --config webpack-production.config.js --progress --display-modules"
   },
   "author": "Sandeep Arneja",
   "license": "MIT",

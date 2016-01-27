@@ -333,8 +333,24 @@ webpack --progress --colors --watch --display-error-details --display-chunks --d
 
 ## Lightweight Dev Server
 
+A light weight server: `serve`
+https://www.npmjs.com/package/serve
+
 ````
-npm install webpack-dev-server -g
+npm install serve
+````
+
+Another choice is python's light weight server.
+
+````
+python -m SimpleHTTPServer
+````
+
+My choice is to use the `webpack-dev-server`
+
+````
+npm install webpack-dev-server --save-dev
+
 ````
 
 To use it:
@@ -657,3 +673,7 @@ In my dev I dont use hash and in prod I use hashes. When compiling for prod i pa
 - https://www.youtube.com/watch?v=VkTCL6Nqm6Y&feature=youtu.be
 - http://webpack.github.io/docs/list-of-tutorials.html
 - http://alexhusakov.com/posts/Set-up-Webpack
+- https://christianalfoni.github.io/react-webpack-cookbook/
+- https://medium.com/@dabit3/beginner-s-guide-to-webpack-b1f1a3638460
+- http://christianalfoni.github.io/javascript/2014/12/13/did-you-know-webpack-and-react-is-awesome.html
+- http://survivejs.com/webpack_react/webpack_compared/

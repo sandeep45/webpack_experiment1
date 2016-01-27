@@ -1,5 +1,4 @@
-console.log("starting content.js");
-
+console.log("starting content.jsq22s");
 React = require("react");
 var calc = require("js/helpers/calculator.js");
 
@@ -7,7 +6,7 @@ var Content = React.createClass({
   render: function(){
     return (
       <div>
-        This is some Content 1223456789
+        This is some Content 122345678900000111
       </div>
     )
   }
